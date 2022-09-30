@@ -5,7 +5,7 @@ from .serializers import NewsSerializer
 
 
 class NewsList(generics.ListCreateAPIView):
-    queryset = News.objects.all()
+    queryset = News.objects.order_by('-created_at')
     serializer_class = NewsSerializer
 
     def perform_create(self, serializer):
