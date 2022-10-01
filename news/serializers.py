@@ -1,12 +1,15 @@
 from rest_framework import serializers
 from .models import News, Comment
+from . import services
 
 
 class LimitedListSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
-        data = data.order_by('-created_at')[:10]
-        return super().to_representation(data)
+        try:
+            data = data.order_by('-created_at')[:10]
+        finally:
+            return super().to_representation(data)
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -14,6 +17,7 @@ class CommentSerializer(serializers.ModelSerializer):
     news = serializers.ReadOnlyField(source='news.title')
 
     class Meta:
+        list_serializer_class = LimitedListSerializer
         model = Comment
         fields = ('id', 'news', 'author', 'body', 'created_at',)
 
@@ -21,7 +25,22 @@ class CommentSerializer(serializers.ModelSerializer):
 class NewsSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source='author.username')
     comments = CommentSerializer(many=True)
+    is_liked = serializers.SerializerMethodField()
 
     class Meta:
         model = News
-        fields = ('id', 'author', 'title', 'body', 'comments', 'created_at',)
+        fields = (
+            'id',
+            'author',
+            'title',
+            'body',
+            'is_liked',
+            'total_likes',
+            'total_comments',
+            'comments',
+            'created_at',
+        )
+
+    def get_is_liked(self, obj) -> bool:
+        user = self.context.get('request').user
+        return services.is_liked(obj, user)

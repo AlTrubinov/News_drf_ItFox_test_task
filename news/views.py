@@ -1,4 +1,7 @@
 from rest_framework import generics
+from rest_framework import viewsets
+
+from .mixins import LikedMixin
 from .models import News, Comment
 from .permissions import IsAuthorOrAdminOrReadOnly
 from .serializers import NewsSerializer, CommentSerializer
@@ -12,7 +15,7 @@ class NewsList(generics.ListCreateAPIView):
         serializer.save(author=self.request.user)
 
 
-class NewsDetail(generics.RetrieveUpdateDestroyAPIView):
+class NewsDetail(LikedMixin, viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrAdminOrReadOnly,)
     queryset = News.objects.all()
     serializer_class = NewsSerializer
