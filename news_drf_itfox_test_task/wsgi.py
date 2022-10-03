@@ -1,5 +1,5 @@
 """
-WSGI config for News_drf_ItFox_test_task project.
+WSGI config for news_drf_itfox_test_task project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,6 +11,6 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'News_drf_ItFox_test_task.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'news_drf_itfox_test_task.settings')
 
 application = get_wsgi_application()
