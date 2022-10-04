@@ -31,7 +31,7 @@ class CommentSerializer(serializers.ModelSerializer):
 
 class NewsSerializer(serializers.ModelSerializer):
     author = serializers.ReadOnlyField(source="author.username")
-    comments = CommentSerializer(many=True)
+    comments = CommentSerializer(many=True, required=False)
     is_liked = serializers.SerializerMethodField()
 
     class Meta:
