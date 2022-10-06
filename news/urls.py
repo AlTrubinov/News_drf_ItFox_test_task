@@ -8,5 +8,5 @@ router.register(r"", NewsDetail)
 urlpatterns = [
     path("<int:news_pk>/comment/<int:pk>/", CommentDetail.as_view()),
     path("<int:news_pk>/comment/", CommentCreateView.as_view()),
-    path("", NewsList.as_view()),
+    path("", NewsList.as_view(), name="news_list"),
 ] + router.urls

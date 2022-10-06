@@ -51,5 +51,8 @@ class NewsSerializer(serializers.ModelSerializer):
     def get_is_liked(self, obj) -> bool:
         """Checks if the user liked the news"""
 
-        user = self.context.get("request").user
-        return services.is_liked(obj, user)
+        if self.context.get("request"):
+            user = self.context.get("request").user
+            return services.is_liked(obj, user)
+        else:
+            return False
